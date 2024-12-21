@@ -1,4 +1,6 @@
-import { makePageForEpisodes } from "./episodes-page.js";
+
+import {render } from "./render-episode.js";
+
 
 export const searchEpisode = (allEpisodes) => {
   const episodesContainer = document.querySelector(".episodes-container");
@@ -34,14 +36,13 @@ export const searchEpisode = (allEpisodes) => {
         );
       });
 
-      // Update the result count with the number of matched episodes
+
       resultCount.textContent = `${filteredEpisodes.length} episode(s) match your search.`;
     }
 
-    // Clear the episodes container
     episodesContainer.innerHTML = "";
 
-    // Render the filtered (or full) episodes
-    makePageForEpisodes(filteredEpisodes);
+   render(filteredEpisodes);
+
   });
 };

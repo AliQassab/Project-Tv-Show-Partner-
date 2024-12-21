@@ -1,29 +1,23 @@
-export const makePageForEpisodes = (episodeList) => {
-  const episodesContainer = document.querySelector(".episodes-container");
 
-  episodeList.forEach((episode) => {
-    const { name, season, number, image, summary } = episode;
+import {render} from "./render-episode.js";
 
-    const episodeCode = `S${season.toString().padStart(2, "0")}E${number
-      .toString()
-      .padStart(2, "0")}`;
+export const makePageForEpisodes = async () => {
 
-    const markup = `
-        <div class="episode">
-          <div class="episode-header">
-            <h3 class="episode-title">${name}</h3>
-            <p class="episode-code">${episodeCode}</p>
-          </div>
-          <img
-            src="${image.medium}"
-            alt="${name}"
-          />
-          <div class="episode-summary">
-            ${summary}
-          </div>
-        </div>
-    `;
-
-    episodesContainer.insertAdjacentHTML("beforeend", markup);
-  });
+  let episodesContainer = document.querySelector(".episodes-container");
+  
+  const apiUrl = "https://api.tvmaze.com/shows/82/episodes";
+  try {
+    const res = await fetch(apiUrl);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.status}`);
+    }
+      const data = await res.json();
+      render(data);
+      return data
+  } catch (error) {
+    console.error("Error fetching episodes:", error);
+    episodesContainer.innerHTML =
+    "<p>Failed to load episodes. Please try again later.</p>";
+  }
 };
+
